@@ -21,6 +21,10 @@ export interface Organizer {
   avatar: string;
   role: string;
   events: number;
+  linkedin?: string;
+  instagram?: string;
+  twitter?: string;
+  email?: string;
 }
 
 export interface EventImage {

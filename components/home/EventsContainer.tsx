@@ -33,7 +33,7 @@ export default function EventsContainer({ initialEvents }: { initialEvents: Even
 
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
   };
 
   return (
@@ -44,7 +44,7 @@ export default function EventsContainer({ initialEvents }: { initialEvents: Even
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
           className="mb-12 text-center flex flex-col items-center"
         >
           <span className="text-[11px] font-semibold text-indigo-400 uppercase tracking-[0.2em] mb-4 block">
@@ -66,7 +66,7 @@ export default function EventsContainer({ initialEvents }: { initialEvents: Even
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
           className="flex flex-col lg:flex-row items-center justify-center gap-4 mb-16"
         >
           {/* Search */}
@@ -115,7 +115,7 @@ export default function EventsContainer({ initialEvents }: { initialEvents: Even
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
               className="text-center py-24 glass border border-white/5 rounded-3xl"
             >
               <div className="text-4xl mb-4 opacity-50">🔍</div>

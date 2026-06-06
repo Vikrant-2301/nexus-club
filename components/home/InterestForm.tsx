@@ -58,7 +58,7 @@ export default function InterestForm() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
             >
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-emerald-400 text-[10px] font-semibold uppercase tracking-[0.2em] mb-8">
                 <Sparkles size={12} />
@@ -100,7 +100,7 @@ export default function InterestForm() {
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
           >
             <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-[32px] glass-strong border border-white/5 relative overflow-hidden shadow-2xl shadow-black/50">
               <div className="absolute top-0 right-0 p-10 opacity-5">

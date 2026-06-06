@@ -38,7 +38,7 @@ export default function HeroSection() {
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
           className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass border border-indigo-500/20 text-indigo-300 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em] mb-10"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse shadow-[0_0_8px_rgba(129,140,248,0.8)]" />
@@ -49,7 +49,7 @@ export default function HeroSection() {
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
           className="text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.1] tracking-tight mb-8"
           style={{ fontFamily: 'var(--font-syne)' }}
         >
@@ -62,7 +62,7 @@ export default function HeroSection() {
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
           className="text-lg sm:text-xl text-white/50 max-w-2xl leading-relaxed mb-12 font-light"
         >
           Sports events, social mixers, yoga sessions, and more — all crafted to connect you with
@@ -73,7 +73,7 @@ export default function HeroSection() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
           className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full sm:w-auto"
         >
           <Link
