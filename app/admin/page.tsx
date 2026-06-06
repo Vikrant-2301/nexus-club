@@ -17,6 +17,7 @@ import {
   BarChart2,
   Settings,
   Zap,
+  MapPin,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
