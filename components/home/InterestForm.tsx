@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { submitInterest } from '@/app/actions/interest';
 import toast from 'react-hot-toast';
-import { Send, Clock, MapPin, Calendar } from 'lucide-react';
+import { Send, Clock, MapPin, Calendar, Sparkles, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function InterestForm() {
   const [loading, setLoading] = useState(false);
@@ -44,125 +45,145 @@ export default function InterestForm() {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-b from-[#070711] to-[#0A0A16] relative overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-600/10 rounded-full blur-[100px] pointer-events-none" />
+    <section className="py-32 bg-[#070711] relative overflow-hidden border-t border-white/5">
+      {/* Ultra-soft ambient glows */}
+      <div className="absolute top-1/2 left-0 w-[800px] h-[800px] bg-indigo-600/5 rounded-full blur-[120px] -translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+      <div className="absolute top-1/2 right-0 w-[600px] h-[600px] bg-emerald-600/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
-        <div className="glass border border-white/10 rounded-3xl p-8 sm:p-12 overflow-hidden relative">
-          <div className="absolute top-0 right-0 p-8 opacity-10">
-            <Send size={120} />
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-syne)' }}>
-                Don&apos;t see your <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-emerald-400">
-                  favorite event?
-                </span>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
+          {/* Left Text Column */}
+          <div>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-emerald-400 text-[10px] font-semibold uppercase tracking-[0.2em] mb-8">
+                <Sparkles size={12} />
+                Community Driven
+              </div>
+              
+              <h2 className="text-5xl sm:text-6xl font-bold text-white mb-6 leading-[1.1] tracking-tight" style={{ fontFamily: 'var(--font-syne)' }}>
+                Don&apos;t see what you&apos;re looking for?
               </h2>
-              <p className="text-white/60 mb-8">
-                Join our waitlist and tell us what you&apos;re looking for. We constantly organize new and exciting activities based on community demand!
+              <p className="text-white/40 text-lg leading-relaxed mb-12 font-light max-w-md">
+                We constantly organize new activities based on demand. Let us know what you want to do, and we'll make it happen when enough people join.
               </p>
 
-              <div className="space-y-4">
-                <div className="flex items-center gap-4 text-white/50 text-sm">
-                  <div className="w-10 h-10 rounded-full glass border border-white/10 flex items-center justify-center text-indigo-400">
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 shrink-0">
                     <Calendar size={18} />
                   </div>
                   <div>
-                    <p className="text-white font-medium">Any Date</p>
-                    <p className="text-xs">You tell us when</p>
+                    <p className="text-white font-medium text-sm">You pick the time</p>
+                    <p className="text-white/40 text-xs mt-1 leading-relaxed">Whether it's a 6 AM sunrise run or a midnight football game, we accommodate.</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 text-white/50 text-sm">
-                  <div className="w-10 h-10 rounded-full glass border border-white/10 flex items-center justify-center text-emerald-400">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 shrink-0">
                     <MapPin size={18} />
                   </div>
                   <div>
-                    <p className="text-white font-medium">Any Activity</p>
-                    <p className="text-xs">From treks to gaming</p>
+                    <p className="text-white font-medium text-sm">You pick the activity</p>
+                    <p className="text-white/40 text-xs mt-1 leading-relaxed">Trekking, gaming, art workshops, or just a social mixer at a nice café.</p>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-4">
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  placeholder="Full Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="input-field w-full"
-                />
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    placeholder="Email Address"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="input-field w-full"
-                  />
-                  <input
-                    type="tel"
-                    name="phone"
-                    required
-                    placeholder="Phone Number"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="input-field w-full"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <input
-                    type="date"
-                    name="preferredDate"
-                    required
-                    value={formData.preferredDate}
-                    onChange={handleChange}
-                    className="input-field w-full text-white/80"
-                  />
-                  <input
-                    type="time"
-                    name="preferredTime"
-                    required
-                    value={formData.preferredTime}
-                    onChange={handleChange}
-                    className="input-field w-full text-white/80"
-                  />
-                </div>
-
-                <input
-                  type="text"
-                  name="activity"
-                  required
-                  placeholder="What activity are you interested in?"
-                  value={formData.activity}
-                  onChange={handleChange}
-                  className="input-field w-full"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="btn-primary w-full py-4 rounded-xl text-sm mt-4 flex justify-center items-center gap-2 disabled:opacity-50"
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  {loading ? 'Submitting...' : 'Join Waitlist'} <Send size={16} />
-                </span>
-              </button>
-            </form>
+            </motion.div>
           </div>
+
+          {/* Right Form Column */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-[32px] glass-strong border border-white/5 relative overflow-hidden shadow-2xl shadow-black/50">
+              <div className="absolute top-0 right-0 p-10 opacity-5">
+                <Send size={160} />
+              </div>
+              
+              <div className="relative z-10 space-y-5">
+                <h3 className="text-xl font-medium text-white mb-6" style={{ fontFamily: 'var(--font-syne)' }}>Join the Waitlist</h3>
+                
+                <div className="space-y-4">
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    placeholder="Full Name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full bg-white/5 border-b border-white/10 px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-500 focus:bg-white/10 transition-all rounded-t-lg font-light text-sm"
+                  />
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <input
+                      type="email"
+                      name="email"
+                      required
+                      placeholder="Email Address"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full bg-white/5 border-b border-white/10 px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-500 focus:bg-white/10 transition-all rounded-t-lg font-light text-sm"
+                    />
+                    <input
+                      type="tel"
+                      name="phone"
+                      required
+                      placeholder="Phone Number"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="w-full bg-white/5 border-b border-white/10 px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-500 focus:bg-white/10 transition-all rounded-t-lg font-light text-sm"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <input
+                      type="date"
+                      name="preferredDate"
+                      required
+                      value={formData.preferredDate}
+                      onChange={handleChange}
+                      className="w-full bg-white/5 border-b border-white/10 px-4 py-3 text-white/80 placeholder:text-white/30 focus:outline-none focus:border-indigo-500 focus:bg-white/10 transition-all rounded-t-lg font-light text-sm [&::-webkit-calendar-picker-indicator]:filter-[invert(1)]"
+                    />
+                    <input
+                      type="time"
+                      name="preferredTime"
+                      required
+                      value={formData.preferredTime}
+                      onChange={handleChange}
+                      className="w-full bg-white/5 border-b border-white/10 px-4 py-3 text-white/80 placeholder:text-white/30 focus:outline-none focus:border-indigo-500 focus:bg-white/10 transition-all rounded-t-lg font-light text-sm [&::-webkit-calendar-picker-indicator]:filter-[invert(1)]"
+                    />
+                  </div>
+
+                  <input
+                    type="text"
+                    name="activity"
+                    required
+                    placeholder="What activity are you interested in?"
+                    value={formData.activity}
+                    onChange={handleChange}
+                    className="w-full bg-white/5 border-b border-white/10 px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-500 focus:bg-white/10 transition-all rounded-t-lg font-light text-sm"
+                  />
+                </div>
+
+                <motion.button
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-white text-black font-semibold py-4 rounded-xl text-sm mt-8 flex justify-center items-center gap-2 hover:bg-white/90 transition-colors disabled:opacity-50"
+                >
+                  {loading ? 'Submitting...' : 'Join Waitlist'} <ArrowRight size={16} />
+                </motion.button>
+              </div>
+            </form>
+          </motion.div>
         </div>
       </div>
     </section>

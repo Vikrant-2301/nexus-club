@@ -248,18 +248,37 @@ export default function EventPageClient({ event }: Props) {
             </div>
 
             {/* Organizer */}
-            <div className="glass border border-white/8 rounded-2xl p-5 flex items-center gap-4">
+            <div className="glass border border-white/8 rounded-2xl p-5 flex flex-col sm:flex-row items-center sm:items-start gap-4">
               <img
                 src={event.organizer.avatar}
                 alt={event.organizer.name}
-                className="w-12 h-12 rounded-full bg-indigo-900"
+                className="w-16 h-16 sm:w-12 sm:h-12 rounded-full bg-indigo-900 object-cover"
               />
-              <div className="flex-1">
+              <div className="flex-1 text-center sm:text-left">
                 <p className="text-white font-semibold text-sm">{event.organizer.name}</p>
-                <p className="text-white/45 text-xs">{event.organizer.role}</p>
+                <p className="text-white/45 text-xs mt-0.5">{event.organizer.role}</p>
+                
+                {/* Social Links */}
+                <div className="flex items-center justify-center sm:justify-start gap-3 mt-3">
+                  {event.organizer.linkedin && (
+                    <a href={event.organizer.linkedin} target="_blank" rel="noreferrer" className="text-white/40 hover:text-indigo-400 transition-colors">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                    </a>
+                  )}
+                  {event.organizer.instagram && (
+                    <a href={event.organizer.instagram} target="_blank" rel="noreferrer" className="text-white/40 hover:text-pink-400 transition-colors">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    </a>
+                  )}
+                  {event.organizer.email && (
+                    <a href={`mailto:${event.organizer.email}`} className="text-white/40 hover:text-white transition-colors">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    </a>
+                  )}
+                </div>
               </div>
-              <div className="text-right">
-                <div className="flex items-center gap-1 text-amber-400">
+              <div className="text-center sm:text-right mt-3 sm:mt-0">
+                <div className="flex items-center justify-center sm:justify-end gap-1 text-amber-400">
                   <Star size={13} className="fill-amber-400" />
                   <span className="text-xs font-semibold text-white">4.9</span>
                 </div>

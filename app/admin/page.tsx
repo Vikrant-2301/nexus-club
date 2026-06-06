@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getEvents, getAdminStats, deleteEvent, authenticateAdmin } from '@/app/actions/admin';
+import { getEvents, getAdminStats, deleteEvent, authenticateAdmin, getBookings, updateAdminPassword, sendPasswordReset } from '@/app/actions/admin';
 import { getInterests } from '@/app/actions/interest';
 import CreateEventForm from '@/components/admin/CreateEventForm';
 import {
@@ -18,21 +18,32 @@ import {
   Settings,
   Zap,
   MapPin,
+  Key,
+  CreditCard,
+  Mail
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { formatCurrency } from '@/lib/utils';
 
 export default function AdminPage() {
   const [unlocked, setUnlocked] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'events' | 'waitlist' | 'settings'>('overview');
+  
+  // Forgot password state
+  const [showForgot, setShowForgot] = useState(false);
+  const [forgotUsername, setForgotUsername] = useState('');
+
+  // Dashboard state
+  const [activeTab, setActiveTab] = useState<'overview' | 'events' | 'applicants' | 'waitlist' | 'settings'>('overview');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingEvent, setEditingEvent] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
   const [managedEvents, setManagedEvents] = useState<Record<string, unknown>[]>([]);
   const [interests, setInterests] = useState<Record<string, unknown>[]>([]);
+  const [bookings, setBookings] = useState<Record<string, unknown>[]>([]);
   const [stats, setStats] = useState<Record<string, unknown>>({
     totalEvents: 0,
     totalSpots: 0,
@@ -42,14 +53,20 @@ export default function AdminPage() {
     revenue: 0
   });
 
+  // Settings state
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+
   const loadData = async () => {
     try {
       const fetchedEvents = await getEvents();
       const fetchedStats = await getAdminStats();
       const fetchedInterests = await getInterests();
+      const fetchedBookings = await getBookings();
       setManagedEvents(fetchedEvents);
       setStats(fetchedStats);
       setInterests(fetchedInterests);
+      setBookings(fetchedBookings);
     } catch (e) {
       toast.error('Failed to load data');
     }
@@ -68,6 +85,33 @@ export default function AdminPage() {
     } else {
       toast.dismiss('admin-login');
       toast.error('Incorrect username or password');
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!forgotUsername) return toast.error('Please enter your username');
+    toast.loading('Sending reset link...', { id: 'admin-forgot' });
+    const res = await sendPasswordReset(forgotUsername);
+    toast.dismiss('admin-forgot');
+    if (res.success) {
+      toast.success(res.message);
+      setShowForgot(false);
+    } else {
+      toast.error(res.message);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    if (!oldPassword || !newPassword) return toast.error('Please fill all fields');
+    toast.loading('Updating password...', { id: 'admin-pw' });
+    const res = await updateAdminPassword(username, oldPassword, newPassword);
+    toast.dismiss('admin-pw');
+    if (res.success) {
+      toast.success(res.message);
+      setOldPassword('');
+      setNewPassword('');
+    } else {
+      toast.error(res.message);
     }
   };
 
@@ -98,51 +142,86 @@ export default function AdminPage() {
             Admin Access
           </h1>
           <p className="text-white/40 text-sm text-center mb-8">
-            Enter your credentials to manage events
+            {showForgot ? 'Reset your password' : 'Enter your credentials to manage events'}
           </p>
 
           <div className="glass border border-white/10 rounded-2xl p-6">
-            <label className="text-xs text-white/40 uppercase tracking-wider font-medium block mb-2">
-              Username
-            </label>
-            <div className="relative mb-4">
-              <input
-                id="admin-username"
-                type="text"
-                placeholder="Enter username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="input-field"
-              />
-            </div>
-            
-            <label className="text-xs text-white/40 uppercase tracking-wider font-medium block mb-2">
-              Password
-            </label>
-            <div className="relative mb-6">
-              <input
-                id="admin-password"
-                type={showPass ? 'text' : 'password'}
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-                className="input-field pr-10"
-              />
-              <button
-                onClick={() => setShowPass(!showPass)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
-              >
-                {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
-              </button>
-            </div>
-            <button
-              id="admin-login-btn"
-              onClick={handleLogin}
-              className="btn-primary w-full py-3.5 rounded-xl text-sm"
-            >
-              <span className="relative z-10">Enter Admin Panel</span>
-            </button>
+            {!showForgot ? (
+              <>
+                <label className="text-xs text-white/40 uppercase tracking-wider font-medium block mb-2">
+                  Username
+                </label>
+                <div className="relative mb-4">
+                  <input
+                    id="admin-username"
+                    type="text"
+                    placeholder="Enter username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="input-field"
+                  />
+                </div>
+                
+                <label className="text-xs text-white/40 uppercase tracking-wider font-medium block mb-2">
+                  Password
+                </label>
+                <div className="relative mb-6">
+                  <input
+                    id="admin-password"
+                    type={showPass ? 'text' : 'password'}
+                    placeholder="Enter password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+                    className="input-field pr-10"
+                  />
+                  <button
+                    onClick={() => setShowPass(!showPass)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
+                  >
+                    {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                  </button>
+                </div>
+                <button
+                  id="admin-login-btn"
+                  onClick={handleLogin}
+                  className="btn-primary w-full py-3.5 rounded-xl text-sm mb-4"
+                >
+                  <span className="relative z-10">Enter Admin Panel</span>
+                </button>
+                <div className="text-center">
+                  <button onClick={() => setShowForgot(true)} className="text-indigo-400 text-xs hover:text-indigo-300">
+                    Forgot Password?
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <label className="text-xs text-white/40 uppercase tracking-wider font-medium block mb-2">
+                  Username
+                </label>
+                <div className="relative mb-6">
+                  <input
+                    type="text"
+                    placeholder="Enter username"
+                    value={forgotUsername}
+                    onChange={(e) => setForgotUsername(e.target.value)}
+                    className="input-field"
+                  />
+                </div>
+                <button
+                  onClick={handleForgotPassword}
+                  className="btn-primary w-full py-3.5 rounded-xl text-sm mb-4"
+                >
+                  <span className="relative z-10">Send Reset Link</span>
+                </button>
+                <div className="text-center">
+                  <button onClick={() => setShowForgot(false)} className="text-white/40 text-xs hover:text-white/70">
+                    Back to Login
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -173,10 +252,11 @@ export default function AdminPage() {
         </div>
 
         {/* Tab bar */}
-        <div className="flex gap-1 p-1 glass border border-white/8 rounded-xl mb-8 w-fit">
+        <div className="flex gap-1 p-1 glass border border-white/8 rounded-xl mb-8 w-fit overflow-x-auto max-w-full">
           {[
             { id: 'overview', label: 'Overview', icon: BarChart2 },
             { id: 'events', label: 'Events', icon: Calendar },
+            { id: 'applicants', label: 'Applicants', icon: CreditCard },
             { id: 'waitlist', label: 'Waitlist', icon: Users },
             { id: 'settings', label: 'Settings', icon: Settings },
           ].map(({ id, label, icon: Icon }) => (
@@ -184,7 +264,7 @@ export default function AdminPage() {
               key={id}
               id={`admin-tab-${id}`}
               onClick={() => setActiveTab(id as any)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
                 activeTab === id
                   ? 'bg-indigo-600 text-white'
                   : 'text-white/50 hover:text-white hover:bg-white/5'
@@ -335,13 +415,77 @@ export default function AdminPage() {
           </div>
         )}
 
+        {/* ---- APPLICANTS TAB ---- */}
+        {activeTab === 'applicants' && (
+          <div className="space-y-6 animate-fade-in">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="font-bold text-white text-lg" style={{ fontFamily: 'var(--font-syne)' }}>Applicants & Bookings</h2>
+                <p className="text-white/40 text-sm">Full details of people who applied for your events</p>
+              </div>
+              <div className="px-3 py-1 rounded-full glass border border-white/10 text-xs text-white/60">
+                {bookings.length} Bookings
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {bookings.length === 0 ? (
+                <div className="p-8 text-center text-white/30 border border-dashed border-white/10 rounded-2xl">
+                  No applicants yet.
+                </div>
+              ) : (
+                bookings.map((booking: any) => (
+                  <div key={booking._id} className="glass border border-white/8 rounded-2xl p-5 overflow-hidden">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="font-bold text-white text-base">{booking.eventSlug.replace(/-/g, ' ')}</p>
+                          <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${booking.status === 'completed' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'}`}>
+                            {booking.status}
+                          </span>
+                        </div>
+                        <p className="text-white/40 text-xs">Primary Contact: {booking.contactEmail} · {booking.contactPhone}</p>
+                      </div>
+                      <div className="text-left md:text-right">
+                        <p className="text-white text-lg font-bold" style={{ fontFamily: 'var(--font-syne)' }}>{formatCurrency(booking.totalAmount)}</p>
+                        <p className="text-white/40 text-xs">Group Size: {booking.groupSize} ({booking.groupType})</p>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white/5 border border-white/5 rounded-xl p-4">
+                      <p className="text-xs text-white/50 uppercase tracking-wider font-semibold mb-3">Attendee Details</p>
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        {booking.attendees.map((attendee: any, idx: number) => (
+                          <div key={idx} className="flex gap-3 items-start">
+                            <div className="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs font-bold flex-shrink-0">
+                              {idx + 1}
+                            </div>
+                            <div>
+                              <p className="text-white text-sm font-medium">{attendee.name} <span className="text-white/30 font-normal">({attendee.age} yrs)</span></p>
+                              <p className="text-white/40 text-xs">Email: {attendee.email || 'N/A'}</p>
+                              <p className="text-white/40 text-xs">Phone: {attendee.phone || 'N/A'}</p>
+                              {attendee.emergencyContact && (
+                                <p className="text-amber-400/70 text-xs mt-0.5">Emergency: {attendee.emergencyContact}</p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+
         {/* ---- WAITLIST TAB ---- */}
         {activeTab === 'waitlist' && (
           <div className="space-y-6 animate-fade-in">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="font-bold text-white text-lg" style={{ fontFamily: 'var(--font-syne)' }}>Interested Users</h2>
-                <p className="text-white/40 text-sm">Review activity requests from your community</p>
+                <p className="text-white/40 text-sm">Full details of activity requests from your community</p>
               </div>
               <div className="px-3 py-1 rounded-full glass border border-white/10 text-xs text-white/60">
                 {interests.length} Total Requests
@@ -359,8 +503,14 @@ export default function AdminPage() {
                     <div className="flex justify-between items-start mb-4">
                       <div>
                         <p className="font-semibold text-white text-sm">{req.name}</p>
-                        <p className="text-white/40 text-xs">{req.email}</p>
-                        <p className="text-white/40 text-xs">{req.phone}</p>
+                        <div className="flex items-center gap-1 mt-1">
+                          <Mail size={12} className="text-white/40" />
+                          <p className="text-white/50 text-xs">{req.email}</p>
+                        </div>
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <CreditCard size={12} className="text-white/40" />
+                          <p className="text-white/50 text-xs">{req.phone}</p>
+                        </div>
                       </div>
                       <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${req.status === 'pending' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}`}>
                         {req.status}
@@ -383,35 +533,73 @@ export default function AdminPage() {
 
         {/* ---- SETTINGS TAB ---- */}
         {activeTab === 'settings' && (
-          <div className="max-w-lg space-y-6 animate-fade-in">
-            <h2 className="font-bold text-white text-lg" style={{ fontFamily: 'var(--font-syne)' }}>Club Settings</h2>
+          <div className="max-w-lg space-y-8 animate-fade-in">
+            <div>
+              <h2 className="font-bold text-white text-lg mb-4" style={{ fontFamily: 'var(--font-syne)' }}>Club Settings</h2>
 
-            {[
-              { label: 'Club Name', placeholder: 'NEXUS CLUB', id: 'setting-name' },
-              { label: 'UPI ID', placeholder: 'nexusclub@upi', id: 'setting-upi' },
-              { label: 'Contact Email', placeholder: 'hello@nexusclub.in', id: 'setting-email' },
-              { label: 'WhatsApp Number', placeholder: '+91 98765 43210', id: 'setting-whatsapp' },
-            ].map(({ label, placeholder, id }) => (
-              <div key={id}>
-                <label className="text-xs text-white/40 uppercase tracking-wider font-medium block mb-2">{label}</label>
-                <input
-                  id={id}
-                  type="text"
-                  placeholder={placeholder}
-                  className="input-field"
-                />
+              <div className="space-y-4 mb-6">
+                {[
+                  { label: 'Club Name', placeholder: 'NEXUS CLUB', id: 'setting-name' },
+                  { label: 'UPI ID', placeholder: 'nexusclub@upi', id: 'setting-upi' },
+                  { label: 'Contact Email', placeholder: 'hello@nexusclub.in', id: 'setting-email' },
+                  { label: 'WhatsApp Number', placeholder: '+91 98765 43210', id: 'setting-whatsapp' },
+                ].map(({ label, placeholder, id }) => (
+                  <div key={id}>
+                    <label className="text-xs text-white/40 uppercase tracking-wider font-medium block mb-2">{label}</label>
+                    <input
+                      id={id}
+                      type="text"
+                      placeholder={placeholder}
+                      className="input-field"
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
 
-            <button
-              id="save-settings-btn"
-              onClick={() => toast.success('Settings saved!')}
-              className="btn-primary px-6 py-3 rounded-xl text-sm inline-flex items-center gap-2"
-            >
-              <span className="relative z-10 flex items-center gap-2">
-                <Save size={15} /> Save Settings
-              </span>
-            </button>
+              <button
+                id="save-settings-btn"
+                onClick={() => toast.success('Settings saved!')}
+                className="btn-primary px-6 py-3 rounded-xl text-sm inline-flex items-center gap-2"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  <Save size={15} /> Save Settings
+                </span>
+              </button>
+            </div>
+
+            <div className="pt-6 border-t border-white/10">
+              <h2 className="font-bold text-white text-lg mb-4 flex items-center gap-2" style={{ fontFamily: 'var(--font-syne)' }}>
+                <Key size={18} className="text-indigo-400" /> Admin Security
+              </h2>
+              <div className="space-y-4 mb-6">
+                <div>
+                  <label className="text-xs text-white/40 uppercase tracking-wider font-medium block mb-2">Current Password</label>
+                  <input
+                    type="password"
+                    placeholder="Enter current password"
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
+                    className="input-field"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-white/40 uppercase tracking-wider font-medium block mb-2">New Password</label>
+                  <input
+                    type="password"
+                    placeholder="Enter new password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="input-field"
+                  />
+                </div>
+              </div>
+              <button
+                onClick={handleChangePassword}
+                className="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 py-3 rounded-xl text-sm transition-colors"
+              >
+                Update Password
+              </button>
+            </div>
           </div>
         )}
       </div>

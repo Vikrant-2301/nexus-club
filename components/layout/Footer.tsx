@@ -87,10 +87,9 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-3">
               {[
-                { icon: Instagram, href: '#', label: 'Instagram' },
-                { icon: Twitter, href: '#', label: 'Twitter' },
-                { icon: Youtube, href: '#', label: 'YouTube' },
-                { icon: Mail, href: 'mailto:hello@nexusclub.in', label: 'Email' },
+                { icon: Instagram, href: 'https://www.instagram.com/shreyygotnofilterss/', label: 'Instagram' },
+                { icon: Youtube, href: 'https://www.youtube.com/@cashreyanshtalks', label: 'YouTube' },
+                { icon: Mail, href: 'mailto:ca.shreyansh@zohomail.in', label: 'Email' },
               ].map(({ icon: Icon, href, label }) => (
                 <a
                   key={label}
@@ -125,10 +124,8 @@ export default function Footer() {
               {[
                 { label: 'About NEXUS', href: '/#about' },
                 { label: 'Organize an Event', href: '/admin' },
-                { label: 'Refund Policy', href: '#' },
-                { label: 'Terms of Service', href: '#' },
-                { label: 'Privacy Policy', href: '#' },
-                { label: 'Contact Us', href: 'mailto:hello@nexusclub.in' },
+                { label: 'Refund Policy', href: '/policies/refund' },
+                { label: 'Contact Shreyansh', href: 'mailto:ca.shreyansh@zohomail.in' },
               ].map(({ label, href }) => (
                 <li key={label}>
                   <Link href={href} className="text-sm text-white/50 hover:text-white transition-colors">

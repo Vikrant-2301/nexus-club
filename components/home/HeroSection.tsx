@@ -1,103 +1,125 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Zap, Users, Star, TrendingUp } from 'lucide-react';
+import { ArrowRight, MapPin, Users, ShieldCheck, Star } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-const stats = [
-  { icon: Users, value: '2,400+', label: 'Members' },
-  { icon: Star, value: '4.9', label: 'Avg Rating' },
-  { icon: TrendingUp, value: '120+', label: 'Events Hosted' },
-  { icon: Zap, value: '48hrs', label: 'Until Next Event' },
+const features = [
+  { icon: Users, label: 'Real People, Real Connections' },
+  { icon: MapPin, label: 'Premium Curated Venues' },
+  { icon: ShieldCheck, label: 'Invite-Only Verification' },
+  { icon: Star, label: 'Unforgettable Experiences' },
 ];
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-20">
+    <section className="relative min-h-[100dvh] flex flex-col justify-center items-center overflow-hidden pt-20">
       {/* Animated gradient background */}
       <div className="absolute inset-0 animated-gradient" />
-      <div className="absolute inset-0 dot-pattern opacity-40" />
+      <div className="absolute inset-0 dot-pattern opacity-30" />
 
-      {/* Glowing orbs */}
-      <div className="orb w-[600px] h-[600px] bg-indigo-600/15 -top-32 -left-32 animate-glow-pulse" />
-      <div
-        className="orb w-[500px] h-[500px] bg-violet-600/10 top-1/2 -right-48 animate-glow-pulse"
-        style={{ animationDelay: '2s' }}
+      {/* Softer Volumetric Lighting */}
+      <motion.div
+        animate={{ scale: [1, 1.05, 1], opacity: [0.08, 0.12, 0.08] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+        className="orb w-[800px] h-[800px] bg-indigo-500/20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+        style={{ filter: 'blur(120px)' }}
       />
-      <div
-        className="orb w-[400px] h-[400px] bg-orange-600/8 bottom-0 left-1/3 animate-glow-pulse"
-        style={{ animationDelay: '4s' }}
+      <motion.div
+        animate={{ scale: [1, 1.1, 1], opacity: [0.05, 0.1, 0.05] }}
+        transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+        className="orb w-[600px] h-[600px] bg-violet-600/10 bottom-0 left-1/4"
+        style={{ filter: 'blur(100px)' }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-20">
-        <div className="max-w-4xl">
-          {/* Eyebrow */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-indigo-500/30 text-indigo-400 text-xs font-semibold uppercase tracking-widest mb-8 animate-slide-up">
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
-            Mumbai's Fastest Growing Club
-          </div>
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-20 text-center flex flex-col items-center">
+        
+        {/* Eyebrow */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass border border-indigo-500/20 text-indigo-300 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em] mb-10"
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse shadow-[0_0_8px_rgba(129,140,248,0.8)]" />
+          Mumbai's Premium Social Club
+        </motion.div>
 
-          {/* Headline */}
-          <h1
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-none tracking-tight mb-6 animate-slide-up delay-100"
-            style={{ fontFamily: 'var(--font-syne)' }}
+        {/* Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.1] tracking-tight mb-8"
+          style={{ fontFamily: 'var(--font-syne)' }}
+        >
+          Find Your <span className="gradient-text">Tribe.</span>
+          <br className="hidden sm:block" />
+          <span className="text-white/90"> Join The Game.</span>
+        </motion.h1>
+
+        {/* Sub */}
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="text-lg sm:text-xl text-white/50 max-w-2xl leading-relaxed mb-12 font-light"
+        >
+          Sports events, social mixers, yoga sessions, and more — all crafted to connect you with
+          people who actually show up.
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full sm:w-auto"
+        >
+          <Link
+            href="#events"
+            id="hero-browse-btn"
+            className="btn-primary w-full sm:w-auto inline-flex justify-center items-center gap-2.5 text-base px-8 py-4 group"
           >
-            <span className="block text-white">Find Your</span>
-            <span className="block gradient-text">Tribe.</span>
-            <span className="block text-white/80">Join The Game.</span>
-          </h1>
+            <span className="relative z-10 flex items-center gap-2.5">
+              Browse Events <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </span>
+          </Link>
+          <Link
+            href="/#about"
+            id="hero-learn-btn"
+            className="btn-secondary w-full sm:w-auto inline-flex justify-center items-center gap-2 text-base px-8 py-4"
+          >
+            Learn More
+          </Link>
+        </motion.div>
 
-          {/* Sub */}
-          <p className="text-lg sm:text-xl text-white/55 max-w-xl leading-relaxed mb-10 animate-slide-up delay-200">
-            Sports events, social mixers, yoga sessions, and more — all crafted to connect you with
-            people who actually show up.
-          </p>
-
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-start gap-4 animate-slide-up delay-300">
-            <Link
-              href="#events"
-              id="hero-browse-btn"
-              className="btn-primary inline-flex items-center gap-2.5 text-base px-7 py-4 rounded-2xl"
-            >
-              <span className="relative z-10 flex items-center gap-2.5">
-                Browse Events <ArrowRight size={18} />
-              </span>
-            </Link>
-            <Link
-              href="/#about"
-              id="hero-learn-btn"
-              className="btn-secondary inline-flex items-center gap-2 text-base px-7 py-4 rounded-2xl"
-            >
-              Learn More
-            </Link>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-16 animate-slide-up delay-400">
-            {stats.map(({ icon: Icon, value, label }) => (
-              <div
-                key={label}
-                className="glass border border-white/8 rounded-2xl p-4 text-center"
-              >
-                <Icon size={18} className="text-indigo-400 mx-auto mb-2" />
-                <div
-                  className="text-2xl font-bold text-white mb-0.5"
-                  style={{ fontFamily: 'var(--font-syne)' }}
-                >
-                  {value}
-                </div>
-                <div className="text-xs text-white/40 font-medium">{label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Minimal Features Bar */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.8 }}
+          className="hidden md:flex items-center justify-center gap-8 mt-24 glass-strong px-10 py-4 rounded-full border border-white/5"
+        >
+          {features.map(({ icon: Icon, label }, idx) => (
+            <div key={label} className="flex items-center gap-2 text-white/40">
+              <Icon size={14} className="text-indigo-400" />
+              <span className="text-[13px] font-medium tracking-wide">{label}</span>
+              {idx < features.length - 1 && <div className="w-1 h-1 rounded-full bg-white/10 ml-8" />}
+            </div>
+          ))}
+        </motion.div>
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10 animate-bounce-slow">
-        <span className="text-xs text-white/30 uppercase tracking-widest">Scroll</span>
-        <div className="w-px h-10 bg-gradient-to-b from-white/30 to-transparent" />
-      </div>
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1.2 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10 animate-bounce-slow"
+      >
+        <div className="w-px h-12 bg-gradient-to-b from-white/30 to-transparent" />
+      </motion.div>
     </section>
   );
 }

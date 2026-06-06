@@ -12,6 +12,35 @@ export async function authenticateAdmin(username: string, passwordHash: string) 
   return !!admin;
 }
 
+export async function getBookings() {
+  await connectToDatabase();
+  const bookings = await BookingModel.find({}).sort({ createdAt: -1 }).lean();
+  return JSON.parse(JSON.stringify(bookings));
+}
+
+export async function updateAdminPassword(username: string, oldHash: string, newHash: string) {
+  await connectToDatabase();
+  const admin = await AdminModel.findOne({ username, passwordHash: oldHash });
+  if (!admin) return { success: false, message: 'Invalid current credentials' };
+  
+  admin.passwordHash = newHash;
+  await admin.save();
+  return { success: true, message: 'Password updated successfully' };
+}
+
+export async function sendPasswordReset(username: string) {
+  // In a real application, you'd generate a token, save it to the DB, and send an email via nodemailer.
+  // We simulate it here by logging the request. You should configure SMTP in .env.
+  await connectToDatabase();
+  const admin = await AdminModel.findOne({ username });
+  if (!admin) return { success: false, message: 'Admin not found' };
+
+  console.log(`[AUTH] Password reset requested for admin: ${username}`);
+  console.log(`[AUTH] To complete reset, please configure Nodemailer SMTP in .env`);
+  
+  return { success: true, message: 'If an account exists, a reset link has been sent to the registered email.' };
+}
+
 export async function getEvents() {
   await connectToDatabase();
   const events = await EventModel.find({}).sort({ createdAt: -1 }).lean();
@@ -61,6 +90,8 @@ export async function getAdminStats() {
 export async function deleteEvent(id: string) {
   await connectToDatabase();
   await EventModel.findByIdAndDelete(id);
+  revalidatePath('/');
+  revalidatePath('/admin');
   return { success: true };
 }
 

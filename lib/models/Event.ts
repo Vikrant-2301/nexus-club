@@ -52,6 +52,9 @@ export interface IEvent extends Document {
     avatar: string;
     role: string;
     events: number;
+    linkedin?: string;
+    instagram?: string;
+    email?: string;
   };
   upiId?: string;
   qrCode?: string;
@@ -116,6 +119,9 @@ const EventSchema: Schema = new Schema(
       avatar: String,
       role: String,
       events: Number,
+      linkedin: String,
+      instagram: String,
+      email: String,
     },
     upiId: String,
     qrCode: String,
