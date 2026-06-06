@@ -28,6 +28,7 @@ export default function AdminPage() {
   const [showPass, setShowPass] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'events' | 'waitlist' | 'settings'>('overview');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
   const [managedEvents, setManagedEvents] = useState<Record<string, unknown>[]>([]);
@@ -266,7 +267,7 @@ export default function AdminPage() {
                   className="input-field w-full sm:w-64"
                 />
                 <button 
-                  onClick={() => setShowCreateModal(true)} 
+                  onClick={() => { setEditingEvent(null); setShowCreateModal(true); }} 
                   className="btn-primary text-sm px-4 py-2.5 rounded-xl inline-flex items-center gap-2 whitespace-nowrap"
                 >
                   <span className="relative z-10 flex items-center gap-2">
@@ -293,7 +294,7 @@ export default function AdminPage() {
                         <p className="text-white/40 text-xs mb-2">{event.category} · Min age {event.minAge}+</p>
                       </div>
                       <div className="flex gap-2 flex-shrink-0">
-                        <button className="p-2 glass border border-white/10 rounded-lg text-white/50 hover:text-white hover:border-indigo-500/40 transition-all">
+                        <button onClick={() => { setEditingEvent(event); setShowCreateModal(true); }} className="p-2 glass border border-white/10 rounded-lg text-white/50 hover:text-white hover:border-indigo-500/40 transition-all">
                           <Edit3 size={13} />
                         </button>
                         <button onClick={() => handleDelete(event._id)} className="p-2 glass border border-white/10 rounded-lg text-white/50 hover:text-red-400 hover:border-red-500/40 transition-all">
@@ -420,9 +421,14 @@ export default function AdminPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
           <div className="w-full max-w-4xl max-h-[90vh] animate-scale-in">
             <CreateEventForm 
-              onCancel={() => setShowCreateModal(false)}
+              initialData={editingEvent}
+              onCancel={() => {
+                setShowCreateModal(false);
+                setEditingEvent(null);
+              }}
               onSuccess={() => {
                 setShowCreateModal(false);
+                setEditingEvent(null);
                 loadData();
               }}
             />

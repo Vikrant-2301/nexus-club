@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { createEvent } from '@/app/actions/admin';
+import { createEvent, updateEvent } from '@/app/actions/admin';
 import toast from 'react-hot-toast';
 import { Image as ImageIcon, MapPin, Calendar, Users, DollarSign, UploadCloud, Plus, Trash, List, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -11,12 +11,12 @@ const MapPicker = dynamic(() => import('./MapPicker'), {
   loading: () => <div className="h-[300px] w-full rounded-xl bg-white/5 animate-pulse flex items-center justify-center text-white/50 border border-white/10">Loading Map...</div>
 });
 
-export default function CreateEventForm({ onCancel, onSuccess }: { onCancel: () => void, onSuccess: () => void }) {
+export default function CreateEventForm({ onCancel, onSuccess, initialData }: { onCancel: () => void, onSuccess: () => void, initialData?: any }) {
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   
   // Default detailed running event per user request
-  const [formData, setFormData] = useState<any>({
+  const [formData, setFormData] = useState<any>(initialData || {
     slug: '',
     title: 'Midnight City Marathon',
     tagline: 'Experience the city lights like never before',
@@ -98,12 +98,15 @@ export default function CreateEventForm({ onCancel, onSuccess }: { onCancel: () 
       submitData.slug = `${baseSlug}-${Math.floor(1000 + Math.random() * 9000)}`;
     }
 
-    const res = await createEvent(submitData);
+    const res = initialData 
+      ? await updateEvent(initialData._id, submitData)
+      : await createEvent(submitData);
+      
     if (res.success) {
-      toast.success('Event created successfully!', { id: 'create-event' });
+      toast.success(`Event ${initialData ? 'updated' : 'created'} successfully!`, { id: 'create-event' });
       onSuccess();
     } else {
-      toast.error(res.error || 'Failed to create event', { id: 'create-event' });
+      toast.error(res.error || `Failed to ${initialData ? 'update' : 'create'} event`, { id: 'create-event' });
     }
     setLoading(false);
   };
@@ -153,7 +156,9 @@ export default function CreateEventForm({ onCancel, onSuccess }: { onCancel: () 
 
   return (
     <div className="glass border border-white/10 rounded-2xl p-6 sm:p-8 relative max-h-[85vh] overflow-y-auto custom-scrollbar">
-      <h2 className="text-2xl font-bold text-white mb-6" style={{ fontFamily: 'var(--font-syne)' }}>Create New Event</h2>
+      <h2 className="text-2xl font-bold text-white mb-6" style={{ fontFamily: 'var(--font-syne)' }}>
+        {initialData ? 'Edit Event' : 'Create New Event'}
+      </h2>
 
       <form onSubmit={handleSubmit} className="space-y-12">
         {/* Basic Info */}
@@ -288,7 +293,15 @@ export default function CreateEventForm({ onCancel, onSuccess }: { onCancel: () 
               <input required type="text" className="input-field w-full sm:w-auto flex-1" placeholder="Label (e.g. Oct 24)" value={date.label} onChange={e => updateDate(index, 'label', e.target.value)} />
               <input required type="date" className="input-field flex-1" value={date.date} onChange={e => updateDate(index, 'date', e.target.value)} />
               <input required type="time" className="input-field w-24" value={date.time} onChange={e => updateDate(index, 'time', e.target.value)} />
-              <input required type="number" className="input-field w-24" placeholder="Spots" value={date.spotsTotal} onChange={e => { updateDate(index, 'spotsTotal', Number(e.target.value)); updateDate(index, 'spotsLeft', Number(e.target.value)); }} />
+              <div className="flex flex-col">
+                <label className="text-[10px] text-white/40 uppercase pl-1">Total Slots</label>
+                <input required type="number" className="input-field w-24" placeholder="Spots" value={date.spotsTotal} onChange={e => {
+                  const newTotal = Number(e.target.value);
+                  const difference = newTotal - date.spotsTotal;
+                  updateDate(index, 'spotsTotal', newTotal);
+                  updateDate(index, 'spotsLeft', Math.max(0, date.spotsLeft + difference));
+                }} />
+              </div>
               <button type="button" onClick={() => {
                 const newDates = formData.dates.filter((_: any, i: number) => i !== index);
                 setFormData({...formData, dates: newDates});
@@ -363,7 +376,7 @@ export default function CreateEventForm({ onCancel, onSuccess }: { onCancel: () 
         <div className="flex gap-4 pt-8 border-t border-white/10">
           <button type="button" onClick={onCancel} className="flex-1 py-3 px-4 rounded-xl text-white hover:bg-white/5 font-medium border border-white/10">Cancel</button>
           <button type="submit" disabled={loading || uploading} className="flex-1 btn-primary py-3 px-4 rounded-xl font-medium disabled:opacity-50">
-            <span className="relative z-10">{loading ? 'Creating...' : 'Publish Event'}</span>
+            <span className="relative z-10">{loading ? 'Saving...' : initialData ? 'Update Event' : 'Publish Event'}</span>
           </button>
         </div>
       </form>

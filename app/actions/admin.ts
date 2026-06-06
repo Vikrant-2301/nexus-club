@@ -63,3 +63,16 @@ export async function deleteEvent(id: string) {
   await EventModel.findByIdAndDelete(id);
   return { success: true };
 }
+
+export async function updateEvent(id: string, data: Record<string, unknown>) {
+  try {
+    await connectToDatabase();
+    const updatedEvent = await EventModel.findByIdAndUpdate(id, data, { new: true });
+    revalidatePath('/');
+    return { success: true, event: JSON.parse(JSON.stringify(updatedEvent)) };
+  } catch (error: unknown) {
+    console.error('Update event error:', error);
+    return { success: false, error: (error as Error).message };
+  }
+}
+
