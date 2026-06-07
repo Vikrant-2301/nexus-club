@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Zap, Mail } from 'lucide-react';
 
 // Custom SVG components for brand icons (removed in lucide-react v1+)
@@ -74,11 +75,15 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
-                <Zap size={16} className="text-white fill-white" />
-              </div>
+              <Image 
+                src="/logo.png" 
+                alt="Beyond Work Logo" 
+                width={32} 
+                height={32} 
+                className="object-contain invert" 
+              />
               <span className="font-bold text-lg tracking-tight" style={{ fontFamily: 'var(--font-syne)' }}>
-                NEXUS <span className="text-indigo-400">CLUB</span>
+                BEYOND <span className="text-indigo-400">WORK</span>
               </span>
             </div>
             <p className="text-white/50 text-sm leading-relaxed max-w-sm mb-6">
@@ -122,7 +127,7 @@ export default function Footer() {
             <p className="text-xs font-semibold text-white/30 uppercase tracking-widest mb-4">Company</p>
             <ul className="space-y-2.5">
               {[
-                { label: 'About NEXUS', href: '/#about' },
+                { label: 'About BEYOND WORK', href: '/#about' },
                 { label: 'Organize an Event', href: '/admin' },
                 { label: 'Refund Policy', href: '/policies/refund' },
                 { label: 'Contact Shreyansh', href: 'mailto:ca.shreyansh@zohomail.in' },

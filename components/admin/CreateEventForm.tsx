@@ -5,6 +5,7 @@ import { createEvent, updateEvent } from '@/app/actions/admin';
 import toast from 'react-hot-toast';
 import { Image as ImageIcon, MapPin, Calendar, Users, DollarSign, UploadCloud, Plus, Trash, List, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 
 const MapPicker = dynamic(() => import('./MapPicker'), {
   ssr: false,
@@ -199,8 +200,8 @@ export default function CreateEventForm({ onCancel, onSuccess, initialData }: { 
           </h3>
           <div className="border-2 border-dashed border-white/10 rounded-xl p-6 text-center">
             {formData.coverImage ? (
-              <div className="relative">
-                <img src={formData.coverImage} alt="Cover Preview" className="w-full h-48 object-cover rounded-lg" />
+              <div className="relative h-48 w-full">
+                <Image src={formData.coverImage} alt="Cover Preview" fill sizes="100vw" className="object-cover rounded-lg" />
                 <button type="button" onClick={() => setFormData({...formData, coverImage: ''})} className="absolute top-2 right-2 p-2 bg-red-500 rounded-lg text-white shadow-lg">
                   <Trash size={14} />
                 </button>

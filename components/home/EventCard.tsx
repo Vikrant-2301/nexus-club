@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Calendar, MapPin, Users, ArrowRight, Clock, Flame } from 'lucide-react';
 import { Event } from '@/lib/types';
 import {
@@ -45,10 +46,12 @@ export default function EventCard({ event, index = 0 }: EventCardProps) {
       >
         {/* Cover image */}
         <div className="relative h-52 overflow-hidden">
-          <img
+          <Image
             src={event.coverImage}
             alt={event.title}
-            className={`w-full h-full object-cover transition-all duration-700 ${
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className={`object-cover transition-all duration-700 ${
               hovered ? 'scale-110' : 'scale-100'
             }`}
           />

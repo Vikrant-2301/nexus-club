@@ -18,14 +18,48 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'BEYOND WORK — Find Your Tribe, Join the Game',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://beyondwork.site'),
+  title: {
+    default: 'BEYOND WORK — Find Your Tribe, Join the Game',
+    template: '%s | BEYOND WORK',
+  },
   description:
     'Mumbai\'s most vibrant club for sports, social events, and unforgettable experiences. Browse events, register instantly, and show up.',
-  keywords: 'club events mumbai, sports events, social mixer, football, yoga, running, basketball',
+  keywords: ['club events mumbai', 'sports events', 'social mixer', 'football', 'yoga', 'running', 'basketball', 'beyond work', 'community'],
+  authors: [{ name: 'Beyond Work' }],
+  creator: 'Beyond Work',
   openGraph: {
-    title: 'BEYOND WORK',
-    description: 'Find Your Tribe, Join the Game',
+    title: 'BEYOND WORK — Find Your Tribe, Join the Game',
+    description: 'Mumbai\'s most vibrant club for sports, social events, and unforgettable experiences.',
+    url: '/',
+    siteName: 'BEYOND WORK',
+    images: [
+      {
+        url: '/logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'BEYOND WORK',
+      },
+    ],
+    locale: 'en_IN',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'BEYOND WORK — Find Your Tribe',
+    description: 'Mumbai\'s most vibrant club for sports, social events, and unforgettable experiences.',
+    images: ['/logo.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 

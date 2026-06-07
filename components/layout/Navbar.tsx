@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X, Zap } from 'lucide-react';
 
 
@@ -26,9 +27,13 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-            <Zap size={16} className="text-white fill-white" />
-          </div>
+          <Image 
+            src="/logo.png" 
+            alt="Beyond Work Logo" 
+            width={32} 
+            height={32} 
+            className="object-contain invert group-hover:scale-110 transition-transform duration-300" 
+          />
           <span
             className="font-syne font-bold text-lg tracking-tight"
             style={{ fontFamily: 'var(--font-syne)' }}

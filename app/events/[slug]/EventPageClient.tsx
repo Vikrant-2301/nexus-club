@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import {
@@ -52,10 +53,13 @@ export default function EventPageClient({ event }: Props) {
     <div className="min-h-screen bg-[#070711]">
       {/* Hero */}
       <div className="relative h-[60vh] min-h-[420px] overflow-hidden">
-        <img
+        <Image
           src={event.coverImage}
           alt={event.title}
-          className="w-full h-full object-cover"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#070711] via-[#070711]/60 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#070711]/80 to-transparent" />
@@ -249,11 +253,15 @@ export default function EventPageClient({ event }: Props) {
 
             {/* Organizer */}
             <div className="glass border border-white/8 rounded-2xl p-5 flex flex-col sm:flex-row items-center sm:items-start gap-4">
-              <img
-                src={event.organizer.avatar}
-                alt={event.organizer.name}
-                className="w-16 h-16 sm:w-12 sm:h-12 rounded-full bg-indigo-900 object-cover"
-              />
+              <div className="relative w-16 h-16 sm:w-12 sm:h-12 flex-shrink-0">
+                <Image
+                  src={event.organizer.avatar}
+                  alt={event.organizer.name}
+                  fill
+                  sizes="(max-width: 640px) 64px, 48px"
+                  className="rounded-full bg-indigo-900 object-cover"
+                />
+              </div>
               <div className="flex-1 text-center sm:text-left">
                 <p className="text-white font-semibold text-sm">{event.organizer.name}</p>
                 <p className="text-white/45 text-xs mt-0.5">{event.organizer.role}</p>

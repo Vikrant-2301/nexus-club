@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { getEvents, getAdminStats, deleteEvent, authenticateAdmin, getBookings, updateAdminPassword, sendPasswordReset } from '@/app/actions/admin';
 import { getInterests } from '@/app/actions/interest';
 import CreateEventForm from '@/components/admin/CreateEventForm';
@@ -362,11 +363,15 @@ export default function AdminPage() {
               .map((event: any) => (
               <div key={event._id} className="glass border border-white/8 rounded-2xl p-5">
                 <div className="flex items-start gap-4">
-                  <img
-                    src={event.coverImage}
-                    alt={event.title}
-                    className="w-20 h-20 object-cover rounded-xl flex-shrink-0"
-                  />
+                  <div className="relative w-20 h-20 flex-shrink-0">
+                    <Image
+                      src={event.coverImage}
+                      alt={event.title}
+                      fill
+                      sizes="80px"
+                      className="object-cover rounded-xl"
+                    />
+                  </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-3">
                       <div>
