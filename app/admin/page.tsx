@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { getEvents, getAdminStats, deleteEvent, authenticateAdmin, getBookings, updateAdminPassword, sendPasswordReset } from '@/app/actions/admin';
+import { getEvents, getAdminStats, deleteEvent, authenticateAdmin, getBookings, updateAdminPassword, sendPasswordReset, deleteBooking } from '@/app/actions/admin';
 import { getInterests } from '@/app/actions/interest';
 import CreateEventForm from '@/components/admin/CreateEventForm';
 import {
@@ -124,6 +124,23 @@ export default function AdminPage() {
         loadData(); // refresh
       } catch (e) {
         toast.error('Failed to delete');
+      }
+    }
+  };
+
+  const handleDeleteBooking = async (id: string) => {
+    if (confirm('Are you sure you want to delete this applicant? This will also release their spots.')) {
+      try {
+        toast.loading('Deleting booking...', { id: 'del-booking' });
+        const res = await deleteBooking(id);
+        if (res.success) {
+          toast.success('Applicant deleted', { id: 'del-booking' });
+          loadData(); // refresh bookings and stats
+        } else {
+          toast.error(res.error || 'Failed to delete', { id: 'del-booking' });
+        }
+      } catch (e) {
+        toast.error('An error occurred', { id: 'del-booking' });
       }
     }
   };
@@ -451,8 +468,13 @@ export default function AdminPage() {
                         </div>
                         <p className="text-white/40 text-xs">Primary Contact: {booking.contactEmail} · {booking.contactPhone}</p>
                       </div>
-                      <div className="text-left md:text-right">
-                        <p className="text-white text-lg font-bold" style={{ fontFamily: 'var(--font-syne)' }}>{formatCurrency(booking.totalAmount)}</p>
+                      <div className="text-left md:text-right flex flex-col md:items-end">
+                        <div className="flex items-center gap-3 mb-1">
+                          <p className="text-white text-lg font-bold" style={{ fontFamily: 'var(--font-syne)' }}>{formatCurrency(booking.totalAmount)}</p>
+                          <button onClick={() => handleDeleteBooking(booking._id)} className="p-1.5 glass border border-white/10 rounded-lg text-white/50 hover:text-red-400 hover:border-red-500/40 transition-all" aria-label="Delete applicant">
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
                         <p className="text-white/40 text-xs">Group Size: {booking.groupSize} ({booking.groupType})</p>
                       </div>
                     </div>

@@ -296,11 +296,17 @@ export default function CreateEventForm({ onCancel, onSuccess, initialData }: { 
               <input required type="time" className="input-field w-24" value={date.time} onChange={e => updateDate(index, 'time', e.target.value)} />
               <div className="flex flex-col">
                 <label className="text-[10px] text-white/40 uppercase pl-1">Total Slots</label>
-                <input required type="number" className="input-field w-24" placeholder="Spots" value={date.spotsTotal} onChange={e => {
+                <input required type="number" className="input-field w-20 sm:w-24" placeholder="Total" value={date.spotsTotal} onChange={e => {
                   const newTotal = Number(e.target.value);
                   const difference = newTotal - date.spotsTotal;
                   updateDate(index, 'spotsTotal', newTotal);
                   updateDate(index, 'spotsLeft', Math.max(0, date.spotsLeft + difference));
+                }} />
+              </div>
+              <div className="flex flex-col">
+                <label className="text-[10px] text-white/40 uppercase pl-1">Slots Left</label>
+                <input required type="number" className="input-field w-20 sm:w-24" placeholder="Left" value={date.spotsLeft} onChange={e => {
+                  updateDate(index, 'spotsLeft', Number(e.target.value));
                 }} />
               </div>
               <button type="button" onClick={() => {

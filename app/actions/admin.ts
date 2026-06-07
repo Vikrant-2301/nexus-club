@@ -107,3 +107,28 @@ export async function updateEvent(id: string, data: Record<string, unknown>) {
   }
 }
 
+export async function deleteBooking(id: string) {
+  try {
+    await connectToDatabase();
+    const booking = await BookingModel.findById(id);
+    if (!booking) return { success: false, error: 'Booking not found' };
+
+    if (booking.status === 'completed') {
+      const event = await EventModel.findById(booking.eventId);
+      if (event) {
+        const dateObj = event.dates.find((d: any) => d.id === booking.dateId);
+        if (dateObj) {
+          dateObj.spotsLeft += booking.groupSize;
+          if (dateObj.spotsLeft > dateObj.spotsTotal) dateObj.spotsLeft = dateObj.spotsTotal;
+          await event.save();
+        }
+      }
+    }
+
+    await BookingModel.findByIdAndDelete(id);
+    revalidatePath('/admin');
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
