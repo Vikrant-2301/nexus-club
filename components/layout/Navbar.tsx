@@ -78,7 +78,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden mt-2 mx-4 rounded-2xl glass-strong border border-white/10 overflow-hidden animate-scale-in">
+        <div className="md:hidden mt-2 mx-4 rounded-2xl bg-[#0a0a1a]/95 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden animate-scale-in">
           <div className="p-4 flex flex-col gap-2">
             <Link
               href="/founder-story"

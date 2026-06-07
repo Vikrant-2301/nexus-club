@@ -43,9 +43,12 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Send email asynchronously
-    sendConfirmationEmail(booking, event).catch(console.error);
-
+    // Send email synchronously to ensure it completes before lambda exits
+    try {
+      await sendConfirmationEmail(booking, event);
+    } catch (emailError) {
+      console.error('Failed to send confirmation email:', emailError);
+    }
     return NextResponse.json({ success: true, message: 'Payment verified' });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

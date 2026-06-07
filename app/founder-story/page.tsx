@@ -29,7 +29,7 @@ const YoutubeIcon = ({ size = 16 }: { size?: number }) => (
 const TIMELINE = [
   { year: 'Kanpur', label: 'The Beginning', desc: 'Grew up with a love for sports and people. Always the connector in any room.' },
   { year: 'CA Studies', label: 'Head Down', desc: 'Years of articleship, exams, and relentless grind. Career became everything.' },
-  { year: 'EY Mumbai', label: 'New City', desc: 'Moved to Mumbai for work. Realized how hard it is to build real friendships as an adult.' },
+  { year: 'EY Mumbai', label: 'Corporate Life', desc: 'Started working at EY. Amidst the fast-paced corporate life, realized how hard it is to build real friendships as an adult.' },
   { year: '2026', label: 'Beyond Work', desc: 'Started organising runs and sports meetups. People showed up. A community was born.' },
 ];
 
@@ -100,14 +100,14 @@ export default function FounderStory() {
 
           {/* Right: portrait */}
           <Reveal delay={0.1}>
-            <div className="relative rounded-2xl overflow-hidden mx-auto lg:mx-0"
-              style={{ maxWidth: '380px', aspectRatio: '3/4', boxShadow: '0 32px 64px rgba(0,0,0,0.55), 0 0 0 1px rgba(99,102,241,0.18)' }}>
+            <div className="relative rounded-2xl overflow-hidden mx-auto lg:mx-0 w-full max-w-[320px] sm:max-w-[380px] aspect-[4/5] sm:aspect-[3/4]"
+              style={{ boxShadow: '0 32px 64px rgba(0,0,0,0.55), 0 0 0 1px rgba(99,102,241,0.18)' }}>
               <div className="absolute inset-0 z-10"
                 style={{ background: 'linear-gradient(to top, rgba(6,6,16,0.88) 0%, rgba(6,6,16,0.15) 45%, transparent 70%)' }} />
-              <Image src="/uploads/shreyansh.jpeg" alt="Shreyansh Chaurasia" fill className="object-cover object-top" priority />
-              <div className="absolute bottom-5 left-5 z-20">
-                <p className="font-syne font-bold text-base text-white">Shreyansh Chaurasia</p>
-                <p className="text-white/55 text-xs mt-0.5">Founder, Beyond Work</p>
+              <Image src="/uploads/shreyansh.jpeg" alt="Shreyansh Chaurasia" fill className="object-cover scale-[1.2] sm:scale-[1.4] lg:scale-[1.7] origin-[50%_15%]" priority />
+              <div className="absolute bottom-5 left-5 right-5 z-20">
+                <p className="font-syne font-bold text-base text-white truncate">Shreyansh Chaurasia</p>
+                <p className="text-white/55 text-xs mt-0.5 truncate">Founder, Beyond Work</p>
               </div>
               <div className="absolute top-0 left-0 right-0 h-px z-20"
                 style={{ background: 'linear-gradient(90deg, transparent, rgba(139,92,246,0.5), transparent)' }} />
@@ -234,10 +234,10 @@ export default function FounderStory() {
             </StoryP>
 
             <div className="pt-6 pb-4 flex flex-col sm:flex-row gap-3">
-              <Link href="/" className="btn-primary inline-flex items-center justify-center gap-2 group">
+              <a href="https://chat.whatsapp.com/EQNP8smPKozILPhfw2dXzr" target="_blank" rel="noreferrer" className="btn-primary inline-flex items-center justify-center gap-2 group">
                 <span className="relative z-10 text-sm">Join the Community</span>
                 <ArrowRight size={16} className="relative z-10 group-hover:translate-x-1 transition-transform" />
-              </Link>
+              </a>
               <Link href="/why-we-exist" className="btn-secondary inline-flex items-center justify-center text-sm">
                 Why We Exist
               </Link>

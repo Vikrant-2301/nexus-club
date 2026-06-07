@@ -63,6 +63,8 @@ export const metadata: Metadata = {
   },
 };
 
+import SocialPopup from '@/components/layout/SocialPopup';
+
 export default function RootLayout({
   children,
 }: {
@@ -74,6 +76,7 @@ export default function RootLayout({
         <Navbar />
         <main>{children}</main>
         <Footer />
+        <SocialPopup />
         <Toaster
           position="bottom-center"
           toastOptions={{
