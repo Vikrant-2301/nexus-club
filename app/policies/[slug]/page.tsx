@@ -11,13 +11,13 @@ export default async function PolicyPage({ params }: { params: Promise<{ slug: s
   const title = 'Refund Policy';
   const content = (
     <div className="space-y-6">
-      <p>At NEXUS CLUB, we strive to ensure that all our events and services meet the highest standards of quality. Please read our refund policy carefully before making any bookings or purchases.</p>
+      <p>At BEYOND WORK, we strive to ensure that all our events and services meet the highest standards of quality. Please read our refund policy carefully before making any bookings or purchases.</p>
       
       <h2 className="text-xl font-semibold text-white mt-8 mb-4">1. No Refund Policy</h2>
       <p>All purchases, event tickets, and membership fees are strictly non-refundable. Once a booking is confirmed and payment is made, we cannot process any cancellations or refunds under any circumstances, including but not limited to personal scheduling conflicts, illness, or change of mind.</p>
       
-      <h2 className="text-xl font-semibold text-white mt-8 mb-4">2. Event Cancellations by NEXUS CLUB</h2>
-      <p>In the rare event that NEXUS CLUB must cancel or reschedule an event due to unforeseen circumstances (e.g., extreme weather, venue unavailability), we will either:</p>
+      <h2 className="text-xl font-semibold text-white mt-8 mb-4">2. Event Cancellations by BEYOND WORK</h2>
+      <p>In the rare event that BEYOND WORK must cancel or reschedule an event due to unforeseen circumstances (e.g., extreme weather, venue unavailability), we will either:</p>
       <ul className="list-disc pl-5 space-y-2">
         <li>Provide a credit for a future event of equal value.</li>
         <li>Automatically transfer your registration to the rescheduled date.</li>

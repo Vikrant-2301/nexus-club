@@ -40,7 +40,7 @@ export default function CreateEventForm({ onCancel, onSuccess, initialData }: { 
     rules: ['No littering on the route', 'Follow volunteer instructions at all times', 'Medical clearance recommended'],
     mapLocation: { lat: 28.6139, lng: 77.2090, address: 'Central Plaza, New Delhi', landmark: 'North Gate' },
     organizer: {
-      name: 'Nexus Club Official',
+      name: 'Beyond Work Official',
       avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36',
       role: 'Event Organizer',
       events: 42

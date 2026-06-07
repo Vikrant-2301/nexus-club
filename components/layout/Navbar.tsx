@@ -33,8 +33,8 @@ export default function Navbar() {
             className="font-syne font-bold text-lg tracking-tight"
             style={{ fontFamily: 'var(--font-syne)' }}
           >
-            NEXUS
-            <span className="text-indigo-400 ml-1">CLUB</span>
+            BEYOND
+            <span className="text-indigo-400 ml-1">WORK</span>
           </span>
         </Link>
 
@@ -65,16 +65,14 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden mt-2 mx-4 rounded-2xl glass-strong border border-white/10 overflow-hidden animate-scale-in">
-          <div className="px-4 py-4 flex flex-col gap-1">
-            <div className="pt-2 mt-2 border-t border-white/10">
-              <Link
-                href="/"
-                className="block text-center btn-primary text-sm px-5 py-3 rounded-xl"
-                onClick={() => setIsOpen(false)}
-              >
-                <span className="relative z-10">Browse Events</span>
-              </Link>
-            </div>
+          <div className="p-4">
+            <Link
+              href="/"
+              className="block text-center btn-primary text-sm px-5 py-3 rounded-xl"
+              onClick={() => setIsOpen(false)}
+            >
+              <span className="relative z-10">Browse Events</span>
+            </Link>
           </div>
         </div>
       )}

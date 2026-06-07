@@ -135,7 +135,7 @@ export default function RegisterClient({ event }: Props) {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: Math.round(priceBreakdown.total * 100),
         currency: 'INR',
-        name: 'NEXUS CLUB',
+        name: 'BEYOND WORK',
         description: `Booking for ${event.title}`,
         order_id: orderData.orderId,
         handler: async function (response: any) {

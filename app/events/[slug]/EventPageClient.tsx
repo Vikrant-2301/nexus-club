@@ -277,13 +277,6 @@ export default function EventPageClient({ event }: Props) {
                   )}
                 </div>
               </div>
-              <div className="text-center sm:text-right mt-3 sm:mt-0">
-                <div className="flex items-center justify-center sm:justify-end gap-1 text-amber-400">
-                  <Star size={13} className="fill-amber-400" />
-                  <span className="text-xs font-semibold text-white">4.9</span>
-                </div>
-                <p className="text-white/35 text-xs mt-0.5">{event.organizer.events} events hosted</p>
-              </div>
             </div>
           </div>
 

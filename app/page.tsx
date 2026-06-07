@@ -7,7 +7,7 @@ import { EventModel } from '@/lib/models/Event';
 
 export default async function HomePage() {
   await connectToDatabase();
-  const dbEvents = await EventModel.find({}).sort({ createdAt: -1 }).lean();
+  const dbEvents = await EventModel.find({}).sort({ 'dates.0.date': 1 }).lean();
   const events = JSON.parse(JSON.stringify(dbEvents)).map((e: any) => ({...e, id: e._id}));
 
   return (

@@ -539,7 +539,7 @@ export default function AdminPage() {
 
               <div className="space-y-4 mb-6">
                 {[
-                  { label: 'Club Name', placeholder: 'NEXUS CLUB', id: 'setting-name' },
+                  { label: 'Club Name', placeholder: 'BEYOND WORK', id: 'setting-name' },
                   { label: 'UPI ID', placeholder: 'nexusclub@upi', id: 'setting-upi' },
                   { label: 'Contact Email', placeholder: 'hello@nexusclub.in', id: 'setting-email' },
                   { label: 'WhatsApp Number', placeholder: '+91 98765 43210', id: 'setting-whatsapp' },

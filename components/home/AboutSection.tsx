@@ -40,7 +40,7 @@ export default function AboutSection() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-[80px] rounded-full group-hover:bg-indigo-500/20 transition-colors duration-700" />
             <div className="relative z-10">
               <span className="block text-[11px] font-semibold text-indigo-400 uppercase tracking-[0.2em] mb-6">
-                About Nexus Club
+                About Beyond Work
               </span>
               <h2
                 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-8 leading-[1.1] tracking-tight"
@@ -50,7 +50,7 @@ export default function AboutSection() {
                 <span className="text-white/40 italic">actually</span> show up.
               </h2>
               <p className="text-white/50 text-lg leading-relaxed max-w-xl font-light">
-                Nexus Club started with a simple idea: Mumbai has millions of people, but finding your tribe is inexplicably hard. We organize high-quality events that make connection effortless.
+                Beyond Work started with a simple idea: Mumbai has millions of people, but finding your tribe is inexplicably hard. We organize high-quality events that make connection effortless.
               </p>
             </div>
           </motion.div>

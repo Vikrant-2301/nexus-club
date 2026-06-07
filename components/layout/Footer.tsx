@@ -140,7 +140,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-white/25">
-            © 2026 NEXUS CLUB · Mumbai, India
+            © 2026 BEYOND WORK · Mumbai, India
           </p>
           <p className="text-xs text-white/25">
             Built with ❤️ for the community

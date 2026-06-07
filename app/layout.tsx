@@ -18,12 +18,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'NEXUS CLUB — Find Your Tribe, Join the Game',
+  title: 'BEYOND WORK — Find Your Tribe, Join the Game',
   description:
     'Mumbai\'s most vibrant club for sports, social events, and unforgettable experiences. Browse events, register instantly, and show up.',
   keywords: 'club events mumbai, sports events, social mixer, football, yoga, running, basketball',
   openGraph: {
-    title: 'NEXUS CLUB',
+    title: 'BEYOND WORK',
     description: 'Find Your Tribe, Join the Game',
     type: 'website',
   },

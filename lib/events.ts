@@ -8,7 +8,7 @@ export const events: Event[] = [
     tagline: 'Under the lights. Full intensity. No mercy.',
     category: 'Football',
     tags: ['5v5', 'Floodlit', 'Competitive', 'Night'],
-    description: `Step onto the turf as the city sleeps. The Midnight Football Showdown is NEXUS CLUB's flagship night tournament — 5v5, floodlit, full intensity. Whether you're a seasoned baller or someone who hasn't laced up in years, this is the arena where legends are made and friendships are forged under the stars.
+    description: `Step onto the turf as the city sleeps. The Midnight Football Showdown is BEYOND WORK's flagship night tournament — 5v5, floodlit, full intensity. Whether you're a seasoned baller or someone who hasn't laced up in years, this is the arena where legends are made and friendships are forged under the stars.
 
 Teams of 5 go head-to-head in a round-robin format across two turfs. The atmosphere? Electric. The competition? Fierce. The post-match chai? Non-negotiable.
 
@@ -86,7 +86,7 @@ We cap every session at 40 players to keep the energy tight. Spots vanish within
     organizer: {
       name: 'Rohan Mehta',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rohan',
-      role: 'Head Organizer · NEXUS CLUB',
+      role: 'Head Organizer · BEYOND WORK',
       events: 24,
     },
     upiId: 'nexusclub@upi',
@@ -111,7 +111,7 @@ Post-run: cold brew coffee, protein bites, and the best conversations you'll hav
       'Pacers for every pace group',
       'Complimentary post-run cold brew & snacks',
       'Professional run photos at sunrise',
-      'NEXUS CLUB running bib included',
+      'BEYOND WORK running bib included',
       'Cool-down stretching session with trainer',
     ],
     schedule: [
@@ -175,7 +175,7 @@ Post-run: cold brew coffee, protein bites, and the best conversations you'll hav
     organizer: {
       name: 'Priya Kapoor',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Priya',
-      role: 'Run Lead · NEXUS CLUB',
+      role: 'Run Lead · BEYOND WORK',
       events: 18,
     },
     upiId: 'nexusclub@upi',
@@ -245,7 +245,7 @@ Each session includes a 45-minute Hatha flow, a 15-minute guided meditation, and
     organizer: {
       name: 'Ananya Singh',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ananya',
-      role: 'Yoga Lead · NEXUS CLUB',
+      role: 'Yoga Lead · BEYOND WORK',
       events: 31,
     },
     upiId: 'nexusclub@upi',
@@ -261,7 +261,7 @@ Each session includes a 45-minute Hatha flow, a 15-minute guided meditation, and
     tags: ['3v3', 'Streetball', 'Competitive', 'Weekend'],
     description: `3v3 streetball. Concrete courts. The only rules are the ones you've always known.
 
-NEXUS CLUB's Streetball Tournament is back — louder, faster, and with bigger prizes. Eight teams of 3 compete in a bracket format across 4 concrete courts, DJ on the sidelines, crowd getting loud.
+BEYOND WORK's Streetball Tournament is back — louder, faster, and with bigger prizes. Eight teams of 3 compete in a bracket format across 4 concrete courts, DJ on the sidelines, crowd getting loud.
 
 This is grassroots basketball at its finest. Individual skill, team chemistry, and sheer desire to win — that's all you need. Register as a trio and bring your game.`,
     highlights: [
@@ -317,7 +317,7 @@ This is grassroots basketball at its finest. Individual skill, team chemistry, a
     organizer: {
       name: 'Dev Sharma',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Dev',
-      role: 'Sports Coordinator · NEXUS CLUB',
+      role: 'Sports Coordinator · BEYOND WORK',
       events: 12,
     },
     upiId: 'nexusclub@upi',
@@ -331,7 +331,7 @@ This is grassroots basketball at its finest. Individual skill, team chemistry, a
     tagline: 'Great people. Great conversations. Zero awkwardness.',
     category: 'Social',
     tags: ['Networking', 'Social', 'Indoor', 'Evening'],
-    description: `Mumbai has millions of people and yet everyone is looking for their tribe. NEXUS CLUB's Social Mixer is designed to change that.
+    description: `Mumbai has millions of people and yet everyone is looking for their tribe. BEYOND WORK's Social Mixer is designed to change that.
 
 Structured activities, thoughtful icebreakers, and a beautifully curated venue come together to make meaningful connection effortless. Unlike a party where you know no one, our mixer is built with intention — every game, every conversation prompt, every activity is designed to help you meet people you'll actually want to see again.
 
@@ -397,7 +397,7 @@ Expect great music, premium beverages, card games, trivia, and that one conversa
     organizer: {
       name: 'Shreya Nair',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Shreya',
-      role: 'Events Lead · NEXUS CLUB',
+      role: 'Events Lead · BEYOND WORK',
       events: 47,
     },
     upiId: 'nexusclub@upi',

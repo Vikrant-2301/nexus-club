@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const dbEvent = await EventModel.findOne({ slug }).lean();
   if (!dbEvent) return { title: 'Event Not Found' };
   return {
-    title: `${dbEvent.title} — NEXUS CLUB`,
+    title: `${dbEvent.title} — BEYOND WORK`,
     description: dbEvent.tagline,
   };
 }
