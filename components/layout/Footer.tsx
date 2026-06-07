@@ -76,10 +76,10 @@ export default function Footer() {
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
               <Image 
-                src="/logo.png" 
+                src="/logo-sm.png" 
                 alt="Beyond Work Logo" 
-                width={32} 
-                height={32} 
+                width={48} 
+                height={48} 
                 className="object-contain invert" 
               />
               <span className="font-bold text-lg tracking-tight" style={{ fontFamily: 'var(--font-syne)' }}>

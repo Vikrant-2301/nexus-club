@@ -28,10 +28,10 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
           <Image 
-            src="/logo.png" 
+            src="/logo-sm.png" 
             alt="Beyond Work Logo" 
-            width={32} 
-            height={32} 
+            width={48} 
+            height={48} 
             className="object-contain invert group-hover:scale-110 transition-transform duration-300" 
           />
           <span
