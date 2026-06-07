@@ -45,6 +45,12 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
+          <Link href="/founder-story" className="text-sm font-medium text-white/70 hover:text-white transition-colors">
+            Founder Story
+          </Link>
+          <Link href="/why-we-exist" className="text-sm font-medium text-white/70 hover:text-white transition-colors">
+            Why We Exist
+          </Link>
         </div>
 
         {/* CTA */}
@@ -70,10 +76,24 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden mt-2 mx-4 rounded-2xl glass-strong border border-white/10 overflow-hidden animate-scale-in">
-          <div className="p-4">
+          <div className="p-4 flex flex-col gap-2">
+            <Link
+              href="/founder-story"
+              className="text-white/80 hover:text-white font-medium px-4 py-2 rounded-lg hover:bg-white/5 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Founder Story
+            </Link>
+            <Link
+              href="/why-we-exist"
+              className="text-white/80 hover:text-white font-medium px-4 py-2 rounded-lg hover:bg-white/5 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Why We Exist
+            </Link>
             <Link
               href="/"
-              className="block text-center btn-primary text-sm px-5 py-3 rounded-xl"
+              className="block text-center btn-primary text-sm px-5 py-3 rounded-xl mt-2"
               onClick={() => setIsOpen(false)}
             >
               <span className="relative z-10">Browse Events</span>
