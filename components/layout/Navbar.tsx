@@ -51,6 +51,9 @@ export default function Navbar() {
           <Link href="/why-we-exist" className="text-sm font-medium text-white/70 hover:text-white transition-colors">
             Why We Exist
           </Link>
+          <Link href="/contact" className="text-sm font-medium text-white/70 hover:text-white transition-colors">
+            Contact
+          </Link>
         </div>
 
         {/* CTA */}
@@ -90,6 +93,13 @@ export default function Navbar() {
               onClick={() => setIsOpen(false)}
             >
               Why We Exist
+            </Link>
+            <Link
+              href="/contact"
+              className="text-white/80 hover:text-white font-medium px-4 py-2 rounded-lg hover:bg-white/5 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Contact
             </Link>
             <Link
               href="/"
