@@ -24,7 +24,7 @@ import {
   Mail
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, formatShortDate } from '@/lib/utils';
 
 export default function AdminPage() {
   const [unlocked, setUnlocked] = useState(false);
@@ -412,7 +412,7 @@ export default function AdminPage() {
                           className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/4 border border-white/8 text-xs text-white/60"
                         >
                           <Calendar size={10} className="text-indigo-400" />
-                          {d.label.split(',')[0]}
+                          {formatShortDate(d.date)}
                           <span className={`font-semibold ${d.spotsLeft <= 0 ? 'text-red-400' : 'text-emerald-400'}`}>
                             {d.spotsLeft <= 0 ? 'Full' : `${d.spotsLeft} left`}
                           </span>

@@ -52,7 +52,7 @@ export async function createEvent(data: Record<string, unknown>) {
     await connectToDatabase();
     // Validate schema or assume frontend does it for now
     const newEvent = await EventModel.create(data);
-    revalidatePath('/');
+    revalidatePath('/', 'layout');
     return { success: true, event: JSON.parse(JSON.stringify(newEvent)) };
   } catch (error: unknown) {
     console.error('Create event error:', error);
@@ -90,8 +90,7 @@ export async function getAdminStats() {
 export async function deleteEvent(id: string) {
   await connectToDatabase();
   await EventModel.findByIdAndDelete(id);
-  revalidatePath('/');
-  revalidatePath('/admin');
+  revalidatePath('/', 'layout');
   return { success: true };
 }
 
@@ -99,7 +98,7 @@ export async function updateEvent(id: string, data: Record<string, unknown>) {
   try {
     await connectToDatabase();
     const updatedEvent = await EventModel.findByIdAndUpdate(id, data, { new: true });
-    revalidatePath('/');
+    revalidatePath('/', 'layout');
     return { success: true, event: JSON.parse(JSON.stringify(updatedEvent)) };
   } catch (error: unknown) {
     console.error('Update event error:', error);
@@ -126,7 +125,7 @@ export async function deleteBooking(id: string) {
     }
 
     await BookingModel.findByIdAndDelete(id);
-    revalidatePath('/admin');
+    revalidatePath('/', 'layout');
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };

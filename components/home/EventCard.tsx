@@ -11,6 +11,7 @@ import {
   getSpotsLabel,
   getCategoryEmoji,
   getCategoryGradient,
+  formatShortDate,
 } from '@/lib/utils';
 
 interface EventCardProps {
@@ -109,7 +110,7 @@ export default function EventCard({ event, index = 0 }: EventCardProps) {
             {nextDate && (
               <div className="flex items-center gap-2 text-xs text-white/60">
                 <Calendar size={13} className="text-indigo-400 flex-shrink-0" />
-                <span>{nextDate.label}</span>
+                <span>{formatShortDate(nextDate.date)}</span>
               </div>
             )}
             {nextDate && (

@@ -19,7 +19,7 @@ import {
   Package,
 } from 'lucide-react';
 import { Event } from '@/lib/types';
-import { formatCurrency, getSpotsColor, getSpotsBarColor, getSpotsLabel, getCategoryEmoji } from '@/lib/utils';
+import { formatCurrency, getSpotsColor, getSpotsBarColor, getSpotsLabel, getCategoryEmoji, formatShortDate } from '@/lib/utils';
 import toast from 'react-hot-toast';
 
 // Dynamic import for map (SSR incompatible)
@@ -111,7 +111,7 @@ export default function EventPageClient({ event }: Props) {
             {/* Quick meta */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                { icon: Calendar, label: 'Next Date', value: event.dates.find(d => d.spotsLeft > 0)?.label || event.dates[0].label },
+                { icon: Calendar, label: 'Next Date', value: event.dates.find(d => d.spotsLeft > 0) ? formatShortDate(event.dates.find(d => d.spotsLeft > 0)!.date) : formatShortDate(event.dates[0].date) },
                 { icon: Clock, label: 'Time', value: event.dates[0].time },
                 { icon: MapPin, label: 'Venue', value: event.mapLocation.address.split(',')[0] },
                 { icon: Users, label: 'Spots Left', value: getSpotsLabel(totalLeft) },
@@ -329,7 +329,7 @@ export default function EventPageClient({ event }: Props) {
                     >
                       <div className="flex justify-between items-start">
                         <div>
-                          <p className="font-medium text-white text-xs">{d.label}</p>
+                          <p className="font-medium text-white text-xs">{formatShortDate(d.date)}</p>
                           <p className="text-white/40 text-xs mt-0.5">{d.time}</p>
                         </div>
                         <span className={`text-xs font-semibold ${getSpotsColor(d.spotsLeft, d.spotsTotal)}`}>

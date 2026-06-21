@@ -291,7 +291,6 @@ export default function CreateEventForm({ onCancel, onSuccess, initialData }: { 
           </h3>
           {formData.dates.map((date: any, index: number) => (
             <div key={index} className="flex flex-wrap sm:flex-nowrap gap-2 items-center bg-white/5 p-3 rounded-xl border border-white/10">
-              <input required type="text" className="input-field w-full sm:w-auto flex-1" placeholder="Label (e.g. Oct 24)" value={date.label} onChange={e => updateDate(index, 'label', e.target.value)} />
               <input required type="date" className="input-field flex-1" value={date.date} onChange={e => updateDate(index, 'date', e.target.value)} />
               <input required type="time" className="input-field w-24" value={date.time} onChange={e => updateDate(index, 'time', e.target.value)} />
               <div className="flex flex-col">

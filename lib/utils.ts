@@ -18,6 +18,15 @@ export function formatDate(dateStr: string): string {
   });
 }
 
+export function formatShortDate(dateStr: string): string {
+  if (!dateStr) return '';
+  return new Date(dateStr).toLocaleDateString('en-IN', {
+    month: 'short',
+    day: 'numeric',
+    weekday: 'short',
+  });
+}
+
 export function getSpotsColor(spotsLeft: number, spotsTotal: number): string {
   const pct = spotsLeft / spotsTotal;
   if (pct <= 0.15) return 'text-red-400';
