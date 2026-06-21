@@ -15,6 +15,8 @@ export interface IBooking extends Document {
   razorpaySignature?: string;
   contactEmail: string;
   contactPhone: string;
+  inviteCode?: string;
+  referredBy?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -42,6 +44,8 @@ const BookingSchema: Schema = new Schema(
     razorpaySignature: String,
     contactEmail: { type: String, required: true },
     contactPhone: { type: String, required: true },
+    inviteCode: { type: String, unique: true, sparse: true },
+    referredBy: String,
   },
   { timestamps: true }
 );

@@ -18,12 +18,13 @@ import {
   Zap,
 } from 'lucide-react';
 import { Event, EventDate, GroupType, Attendee } from '@/lib/types';
-import { formatCurrency, getSpotsColor, getCategoryEmoji } from '@/lib/utils';
+import { formatCurrency, getSpotsColor, getCategoryEmoji, formatShortDate } from '@/lib/utils';
 import { getPriceForGroup, GROUP_OPTIONS } from '@/lib/events';
 import toast from 'react-hot-toast';
 
 interface Props {
   event: Event;
+  referredBy?: string;
 }
 
 const STEPS = [
@@ -35,7 +36,7 @@ const STEPS = [
 
 const EMPTY_ATTENDEE: Attendee = { name: '', phone: '', email: '', age: '' };
 
-export default function RegisterClient({ event }: Props) {
+export default function RegisterClient({ event, referredBy }: Props) {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [selectedDate, setSelectedDate] = useState<EventDate | null>(null);
@@ -45,6 +46,7 @@ export default function RegisterClient({ event }: Props) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [inviteCode, setInviteCode] = useState<string | null>(null);
 
   // Load Razorpay Script
   useEffect(() => {
@@ -57,6 +59,10 @@ export default function RegisterClient({ event }: Props) {
   const priceBreakdown = selectedDate && groupType
     ? getPriceForGroup(event, groupType, groupSize, selectedDate.id)
     : null;
+
+  const isReferred = Boolean(referredBy && referredBy.trim().length > 0);
+  const discountAmount = (isReferred && priceBreakdown) ? priceBreakdown.total * 0.1 : 0;
+  const finalTotal = priceBreakdown ? priceBreakdown.total - discountAmount : 0;
 
   // ---- STEP 1: Date ----
   const handleDateSelect = (date: EventDate) => {
@@ -121,19 +127,24 @@ export default function RegisterClient({ event }: Props) {
           groupType,
           groupSize,
           attendees,
-          totalAmount: priceBreakdown.total,
+          totalAmount: finalTotal,
           contactEmail: attendees[0].email,
-          contactPhone: attendees[0].phone
+          contactPhone: attendees[0].phone,
+          referredBy
         })
       });
 
       const orderData = await orderRes.json();
       if (!orderRes.ok) throw new Error(orderData.error);
+      
+      if (orderData.inviteCode) {
+        setInviteCode(orderData.inviteCode);
+      }
 
       // 2. Open Razorpay Widget
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: Math.round(priceBreakdown.total * 100),
+        amount: Math.round(finalTotal * 100),
         currency: 'INR',
         name: 'BEYOND WORK',
         description: `Booking for ${event.title}`,
@@ -189,55 +200,101 @@ export default function RegisterClient({ event }: Props) {
   // ---- SUCCESS SCREEN ----
   if (submitted) {
     return (
-      <div className="min-h-screen bg-[#070711] flex items-center justify-center px-4 pt-20">
-        <div className="max-w-lg w-full text-center animate-scale-in">
-          {/* Success icon */}
-          <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center animate-scale-in">
-            <CheckCircle size={36} className="text-emerald-400" />
+      <div className="min-h-screen bg-[#070711] flex items-center justify-center px-4 py-10 md:py-0">
+        <div className="max-w-3xl w-full animate-scale-in">
+          
+          {/* Header */}
+          <div className="text-center mb-8 md:mb-10">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center animate-scale-in">
+              <CheckCircle size={30} className="text-emerald-400" />
+            </div>
+            <h1
+              className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2"
+              style={{ fontFamily: 'var(--font-syne)' }}
+            >
+              You're In! 🎉
+            </h1>
+            <p className="text-white/55 text-sm md:text-base">
+              Your spot is confirmed. A confirmation email has been sent to {attendees[0].email}.
+            </p>
           </div>
 
-          <h1
-            className="text-4xl sm:text-5xl font-bold text-white mb-3"
-            style={{ fontFamily: 'var(--font-syne)' }}
-          >
-            You're In! 🎉
-          </h1>
-          <p className="text-white/55 text-base mb-8">
-            Your spot is confirmed. A confirmation email has been sent to {attendees[0].email}.
-          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            {/* Left Column: Summary */}
+            <div className="glass border border-white/10 rounded-2xl p-6 text-left space-y-3">
+              <h2 className="text-sm font-semibold text-white/40 uppercase tracking-wider mb-2">Booking Summary</h2>
+              {[
+                { label: 'Event', value: event.title },
+                { label: 'Date', value: selectedDate ? formatShortDate(selectedDate.date) : '' },
+                { label: 'Time', value: selectedDate?.time || '' },
+                { label: 'Venue', value: selectedDate?.location || '' },
+                { label: 'Group', value: GROUP_OPTIONS.find(g => g.type === groupType)?.label || '' },
+                { label: 'Attendees', value: attendees.map(a => a.name).join(', ') },
+                { label: 'Total Paid', value: priceBreakdown ? formatCurrency(finalTotal) : '' },
+              ].map(({ label, value }) => (
+                <div key={label} className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-4 py-1.5 border-b border-white/5 last:border-0">
+                  <span className="text-white/40 text-sm flex-shrink-0">{label}</span>
+                  <span className="text-white text-sm font-medium sm:text-right break-words">{value}</span>
+                </div>
+              ))}
+            </div>
 
-          {/* Summary card */}
-          <div className="glass border border-white/10 rounded-2xl p-6 text-left space-y-4 mb-8">
-            <h2 className="text-sm font-semibold text-white/40 uppercase tracking-wider">Booking Summary</h2>
-            {[
-              { label: 'Event', value: event.title },
-              { label: 'Date', value: selectedDate?.label || '' },
-              { label: 'Time', value: selectedDate?.time || '' },
-              { label: 'Venue', value: selectedDate?.location || '' },
-              { label: 'Group', value: GROUP_OPTIONS.find(g => g.type === groupType)?.label || '' },
-              { label: 'Attendees', value: attendees.map(a => a.name).join(', ') },
-              { label: 'Total Paid', value: priceBreakdown ? formatCurrency(priceBreakdown.total) : '' },
-            ].map(({ label, value }) => (
-              <div key={label} className="flex justify-between gap-4">
-                <span className="text-white/40 text-sm">{label}</span>
-                <span className="text-white text-sm font-medium text-right">{value}</span>
+            {/* Right Column: Invite & Actions */}
+            <div className="space-y-6">
+              {/* Invite Card */}
+              {inviteCode && (
+                <div className="glass border border-indigo-500/30 bg-indigo-500/10 rounded-2xl p-6 text-left space-y-4 relative overflow-hidden">
+                  <div className="absolute -top-10 -right-10 text-indigo-500/20 blur-xl">
+                    <Flame size={100} />
+                  </div>
+                  
+                  <div className="relative z-10 flex flex-col items-start gap-1">
+                    <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest flex items-center gap-1">
+                      <Zap size={10} /> 10% Off For Friends
+                    </span>
+                    <h2 className="text-xl font-bold text-white flex items-center gap-2 mt-2" style={{ fontFamily: 'var(--font-syne)' }}>
+                      Invite Your Friends!
+                    </h2>
+                  </div>
+
+                  <p className="text-white/70 text-sm relative z-10 leading-relaxed">
+                    Don't go alone. Share this link with your friends and they'll get an automatic <strong className="text-white">10% discount</strong> when they join your batch.
+                  </p>
+                  <div className="flex flex-col xl:flex-row items-stretch xl:items-center gap-2 pt-2 relative z-10">
+                    <input 
+                      type="text" 
+                      readOnly 
+                      value={`${typeof window !== 'undefined' ? window.location.origin : ''}/events/${event.slug}/register?ref=${inviteCode}`} 
+                      className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white/80 w-full outline-none flex-1"
+                    />
+                    <button 
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/events/${event.slug}/register?ref=${inviteCode}`);
+                        toast.success('Link copied!');
+                      }}
+                      className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-3 rounded-xl text-sm font-semibold transition-colors flex-shrink-0 w-full xl:w-auto"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link
+                  href="/"
+                  className="btn-secondary flex-1 text-center py-3.5 rounded-xl text-sm"
+                >
+                  Browse Events
+                </Link>
+                <Link
+                  href={`/events/${event.slug}`}
+                  className="btn-primary flex-1 text-center py-3.5 rounded-xl text-sm"
+                >
+                  <span className="relative z-10">Back to Event</span>
+                </Link>
               </div>
-            ))}
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Link
-              href="/"
-              className="btn-secondary flex-1 text-center py-3.5 rounded-xl text-sm"
-            >
-              Browse More Events
-            </Link>
-            <Link
-              href={`/events/${event.slug}`}
-              className="btn-primary flex-1 text-center py-3.5 rounded-xl text-sm"
-            >
-              <span className="relative z-10">Back to Event</span>
-            </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -564,18 +621,38 @@ export default function RegisterClient({ event }: Props) {
 
             {/* Total */}
             {priceBreakdown && (
-              <div className="mt-6 glass border border-indigo-500/20 rounded-xl px-5 py-4 flex items-center justify-between">
-                <div>
-                  <p className="text-white/40 text-xs uppercase tracking-wider mb-0.5">Total to Pay</p>
-                  <p className="text-white/60 text-xs">
-                    {priceBreakdown.earlyBirdCount > 0
-                      ? `${priceBreakdown.earlyBirdCount} × ${formatCurrency(priceBreakdown.earlyBirdPrice)} (early bird)`
-                      : `${groupSize} × ${formatCurrency(priceBreakdown.fullPrice)}`}
-                  </p>
+              <div className="mt-6 glass border border-indigo-500/20 rounded-xl px-5 py-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-white/40 text-xs uppercase tracking-wider mb-0.5">Base Price</p>
+                    <p className="text-white/60 text-xs">
+                      {priceBreakdown.earlyBirdCount > 0
+                        ? `${priceBreakdown.earlyBirdCount} × ${formatCurrency(priceBreakdown.earlyBirdPrice)} (early bird)`
+                        : `${groupSize} × ${formatCurrency(priceBreakdown.fullPrice)}`}
+                    </p>
+                  </div>
+                  <span className="text-lg font-semibold text-white/80">
+                    {formatCurrency(priceBreakdown.total)}
+                  </span>
                 </div>
-                <span className="text-2xl font-bold text-indigo-400" style={{ fontFamily: 'var(--font-syne)' }}>
-                  {formatCurrency(priceBreakdown.total)}
-                </span>
+                {isReferred && (
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-emerald-400/80 text-xs uppercase tracking-wider mb-0.5 flex items-center gap-1">
+                        <Zap size={10} /> Invite Discount (10%)
+                      </p>
+                    </div>
+                    <span className="text-lg font-semibold text-emerald-400/80">
+                      -{formatCurrency(discountAmount)}
+                    </span>
+                  </div>
+                )}
+                <div className="pt-3 border-t border-white/10 flex items-center justify-between">
+                  <p className="text-white/40 text-xs uppercase tracking-wider">Total to Pay</p>
+                  <span className="text-2xl font-bold text-indigo-400" style={{ fontFamily: 'var(--font-syne)' }}>
+                    {formatCurrency(finalTotal)}
+                  </span>
+                </div>
               </div>
             )}
 
@@ -596,7 +673,7 @@ export default function RegisterClient({ event }: Props) {
             <div className="flex items-center gap-2 text-xs text-indigo-400 font-semibold mb-2 glass border border-indigo-500/20 rounded-xl px-4 py-2.5 w-fit">
               <Calendar size={13} /> {selectedDate?.label}
               <span className="text-white/30 mx-1">·</span>
-              {priceBreakdown && <span>{formatCurrency(priceBreakdown.total)} total</span>}
+              {priceBreakdown && <span>{formatCurrency(finalTotal)} total</span>}
             </div>
             <h2 className="text-xl font-bold text-white mb-1" style={{ fontFamily: 'var(--font-syne)' }}>
               Complete Payment
@@ -613,7 +690,7 @@ export default function RegisterClient({ event }: Props) {
                 </div>
                 <p className="text-white/60 mb-2 font-medium">You are paying</p>
                 <h3 className="text-4xl font-bold text-white gradient-text mb-6">
-                  {priceBreakdown ? formatCurrency(priceBreakdown.total) : ''}
+                  {priceBreakdown ? formatCurrency(finalTotal) : ''}
                 </h3>
                 
                 <p className="text-xs text-white/30 mb-6">Payments are secured by Razorpay</p>

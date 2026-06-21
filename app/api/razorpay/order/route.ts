@@ -12,7 +12,7 @@ const razorpay = new Razorpay({
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { eventId, dateId, groupType, groupSize, attendees, totalAmount, contactEmail, contactPhone } = body;
+    const { eventId, dateId, groupType, groupSize, attendees, totalAmount, contactEmail, contactPhone, referredBy } = body;
 
     await connectToDatabase();
 
@@ -31,8 +31,20 @@ export async function POST(req: NextRequest) {
       totalAmount,
       contactEmail,
       contactPhone,
-      status: 'pending'
+      status: 'pending',
+      referredBy: referredBy || null
     });
+
+    // Generate unique invite code
+    let isUnique = false;
+    let newInviteCode = '';
+    while (!isUnique) {
+      newInviteCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+      const existing = await BookingModel.findOne({ inviteCode: newInviteCode });
+      if (!existing) isUnique = true;
+    }
+    booking.inviteCode = newInviteCode;
+
     await booking.save();
 
     // Create Razorpay Order (amount in paise)
@@ -47,7 +59,7 @@ export async function POST(req: NextRequest) {
     booking.razorpayOrderId = order.id;
     await booking.save();
 
-    return NextResponse.json({ orderId: order.id, bookingId: booking._id.toString() });
+    return NextResponse.json({ orderId: order.id, bookingId: booking._id.toString(), inviteCode: booking.inviteCode });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

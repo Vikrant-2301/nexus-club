@@ -5,10 +5,13 @@ import RegisterClient from './RegisterClient';
 
 interface Props {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function RegisterPage({ params }: Props) {
+export default async function RegisterPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  const resolvedSearchParams = await searchParams;
+  const referredBy = typeof resolvedSearchParams?.ref === 'string' ? resolvedSearchParams.ref : undefined;
   await connectToDatabase();
   const dbEvent = await EventModel.findOne({ slug }).lean();
   if (!dbEvent) notFound();
@@ -19,5 +22,5 @@ export default async function RegisterPage({ params }: Props) {
     event.id = dbEvent._id.toString();
   }
 
-  return <RegisterClient event={event} />;
+  return <RegisterClient event={event} referredBy={referredBy} />;
 }

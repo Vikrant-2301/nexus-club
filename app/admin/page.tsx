@@ -479,6 +479,23 @@ export default function AdminPage() {
                       </div>
                     </div>
                     
+                    {(booking.inviteCode || booking.referredBy) && (
+                      <div className="flex flex-wrap gap-3 mb-4 mt-2">
+                        {booking.inviteCode && (
+                          <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-lg px-3 py-1.5 text-xs text-indigo-300 flex items-center gap-1.5">
+                            <span className="font-semibold uppercase tracking-wider text-indigo-400/50">Invite Code:</span>
+                            {booking.inviteCode}
+                          </div>
+                        )}
+                        {booking.referredBy && (
+                          <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-3 py-1.5 text-xs text-emerald-300 flex items-center gap-1.5">
+                            <span className="font-semibold uppercase tracking-wider text-emerald-400/50">Referred By:</span>
+                            {booking.referredBy}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     <div className="bg-white/5 border border-white/5 rounded-xl p-4">
                       <p className="text-xs text-white/50 uppercase tracking-wider font-semibold mb-3">Attendee Details</p>
                       <div className="grid sm:grid-cols-2 gap-4">
